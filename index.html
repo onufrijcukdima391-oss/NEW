@@ -1,0 +1,201 @@
+
+# ==========================================
+# PRO GEAR — МЕНЕДЖЕР СПОРЯДЖЕННЯ
+# Мініпроєкт з використанням множин Python
+# ==========================================
+
+import time
+
+print("=" * 50)
+print("       PRO GEAR — МЕНЕДЖЕР СПОРЯДЖЕННЯ")
+print("=" * 50)
+
+# Два готові комплекти
+kit_a = {
+    "Рюкзак", "Ліхтарик", "Вода", "Карта",
+    "Аптечка", "Ніж", "Компас", "Павербанк"
+}
+
+kit_b = {
+    "Рюкзак", "Вода", "Намет", "Спальник",
+    "Аптечка", "Компас", "Їжа", "Павербанк"
+}
+
+# Необхідне спорядження
+required = {
+    "Рюкзак", "Вода", "Аптечка",
+    "Ліхтарик", "Компас"
+}
+
+
+def show_kit(name, kit):
+    print("\n" + name)
+    print("-" * 35)
+
+    if len(kit) == 0:
+        print("Комплект порожній!")
+    else:
+        for number, item in enumerate(sorted(kit), 1):
+            print(f"{number}. {item}")
+
+    print("Кількість предметів:", len(kit))
+
+
+def compare_kits():
+    print("\n========== ПОРІВНЯННЯ ==========")
+
+    common = kit_a & kit_b
+    all_items = kit_a | kit_b
+    only_a = kit_a - kit_b
+    only_b = kit_b - kit_a
+
+    print("\nСпільні предмети:")
+    print(sorted(common))
+
+    print("\nУсі унікальні предмети:")
+    print(sorted(all_items))
+
+    print("\nТільки в комплекті А:")
+    print(sorted(only_a))
+
+    print("\nТільки в комплекті Б:")
+    print(sorted(only_b))
+
+    print("\nУсього унікальних предметів:", len(all_items))
+
+
+def check_missing(kit, name):
+    print(f"\nПеревірка комплекту {name}")
+    print("-" * 35)
+
+    missing = required - kit
+
+    if len(missing) == 0:
+        print("Комплект повністю готовий!")
+    else:
+        print("Не вистачає таких предметів:")
+        for item in sorted(missing):
+            print("-", item)
+
+    print("Готовність:", len(required - missing), "/", len(required))
+
+
+def add_item():
+    print("\nДОДАВАННЯ ПРЕДМЕТА")
+    print("1 — Комплект А")
+    print("2 — Комплект Б")
+
+    choice = input("Оберіть комплект: ").strip()
+    item = input("Введіть назву предмета: ").strip()
+
+    if not item:
+        print("Назва не може бути порожньою!")
+        return
+
+    if choice == "1":
+        if item in kit_a:
+            print("Такий предмет уже є!")
+        else:
+            kit_a.add(item)
+            print("Предмет успішно додано до комплекту А!")
+
+    elif choice == "2":
+        if item in kit_b:
+            print("Такий предмет уже є!")
+        else:
+            kit_b.add(item)
+            print("Предмет успішно додано до комплекту Б!")
+
+    else:
+        print("Неправильний вибір!")
+
+
+def remove_item():
+    print("\nВИДАЛЕННЯ ПРЕДМЕТА")
+    choice = input("Оберіть комплект (А або Б): ").strip().upper()
+    item = input("Назва предмета: ").strip()
+
+    if choice == "А":
+        kit = kit_a
+    elif choice == "Б":
+        kit = kit_b
+    else:
+        print("Неправильний вибір!")
+        return
+
+    if item in kit:
+        kit.remove(item)
+        print("Предмет видалено!")
+    else:
+        print("Такого предмета немає!")
+
+
+def statistics():
+    print("\n========== СТАТИСТИКА ==========")
+
+    total = kit_a | kit_b
+    common = kit_a & kit_b
+
+    print("Предметів у комплекті А:", len(kit_a))
+    print("Предметів у комплекті Б:", len(kit_b))
+    print("Спільних предметів:", len(common))
+    print("Унікальних предметів:", len(total))
+
+    if len(kit_a) > len(kit_b):
+        print("Комплект А містить більше предметів.")
+    elif len(kit_b) > len(kit_a):
+        print("Комплект Б містить більше предметів.")
+    else:
+        print("Обидва комплекти мають однакову кількість предметів.")
+
+
+# Головне меню
+while True:
+
+    print("\n" + "=" * 40)
+    print("                 ГОЛОВНЕ МЕНЮ")
+    print("=" * 40)
+
+    print("1. Переглянути комплект А")
+    print("2. Переглянути комплект Б")
+    print("3. Порівняти комплекти")
+    print("4. Перевірити готовність комплекту А")
+    print("5. Перевірити готовність комплекту Б")
+    print("6. Додати предмет")
+    print("7. Видалити предмет")
+    print("8. Статистика")
+    print("9. Вийти з програми")
+
+    choice = input("\nВаш вибір: ").strip()
+
+    if choice == "1":
+        show_kit("КОМПЛЕКТ А", kit_a)
+
+    elif choice == "2":
+        show_kit("КОМПЛЕКТ Б", kit_b)
+
+    elif choice == "3":
+        compare_kits()
+
+    elif choice == "4":
+        check_missing(kit_a, "А")
+
+    elif choice == "5":
+        check_missing(kit_b, "Б")
+
+    elif choice == "6":
+        add_item()
+
+    elif choice == "7":
+        remove_item()
+
+    elif choice == "8":
+        statistics()
+
+    elif choice == "9":
+        print("\nДякую за використання PRO GEAR!")
+        print("Програму завершено.")
+        break
+
+    else:
+        print("Помилка! Введіть число від 1 до 9.")
